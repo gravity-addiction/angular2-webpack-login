@@ -1,0 +1,11 @@
+# copy sample.env to .env
+cp sample.env .env
+
+# edit .env
+# change cookie_secret
+
+# install npm modules
+npm install
+
+# start node server
+node index.js

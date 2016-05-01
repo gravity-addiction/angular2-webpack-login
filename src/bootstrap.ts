@@ -2,7 +2,8 @@ import {enableProdMode, provide} from "angular2/core";
 import {bootstrap, ELEMENT_PROBE_PROVIDERS} from 'angular2/platform/browser';
 import {ROUTER_PROVIDERS} from 'angular2/router';
 import {HashLocationStrategy, LocationStrategy} from 'angular2/platform/common';
-import {HTTP_PROVIDERS} from 'angular2/http';
+import {Http, HTTP_PROVIDERS} from 'angular2/http';
+import {AuthConfig, AuthHttp} from 'angular2-jwt';
 
 const ENV_PROVIDERS = [];
 // depending on the env mode, enable prod mode or add debugging modules
@@ -28,6 +29,15 @@ document.addEventListener('DOMContentLoaded', function main() {
     ...HTTP_PROVIDERS,
     ...ROUTER_PROVIDERS,
     ...ENV_PROVIDERS,
+    provide(AuthHttp, {
+      useFactory: (http) => {
+        return new AuthHttp(new AuthConfig({
+          tokenName: 'jwt',
+          noJwtError: true
+        }), http);
+      },
+      deps: [Http]
+    }),
     provide(LocationStrategy, {useClass: HashLocationStrategy}) // use #/ routes, remove this for HTML5 mode
   ])
   .catch(err => console.error(err));

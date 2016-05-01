@@ -1,0 +1,20 @@
+{
+  "name": "angular2-webpack-login-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^1.5.0",
+    "body-parser": "^1.14.2",
+    "cors": "^2.7.1",
+    "crypto": "0.0.3",
+    "dotenv": "^0.4.0",
+    "errorhandler": "^1.1.1",
+    "express": "^4.13.3",
+    "express-jwt": "^0.3.1",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^5.0.1",
+    "q": "^1.4.1"
+  }
+}

@@ -53,3 +53,6 @@ __build__/**
 # IDE #
 .idea/
 *.swp
+
+# Backend Node Files #
+/backend/node_modules

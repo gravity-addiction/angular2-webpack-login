@@ -1,0 +1,21 @@
+<div class="signup center-block jumbotron">
+  <h1>Signup</h1>
+  <form role="form" (submit)="signup($event, username.value, password.value, email.value, fullname.value)">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input type="text" #username class="form-control" id="username" placeholder="Username" />
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" #password class="form-control" id="password" placeholder="Password" />
+  </div>
+  <div class="form-group">
+    <label for="fullname">Full Name</label>
+    <input type="text" #fullname class="form-control" id="fullname" placeholder="Full Name" />
+    <label for="email">E-Mail</label>
+    <input type="text" #email class="form-control" id="email" placeholder="E-Mail Address" />
+  </div>
+  <button type="submit" class="btn btn-default">Signup</button>
+  <a [routerLink]="['Login']">Click here to Login</a>
+</form>
+</div>

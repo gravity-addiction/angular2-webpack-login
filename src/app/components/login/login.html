@@ -1,0 +1,24 @@
+<div class="login jumbotron center-block">
+  <h1>Login</h1>
+  <form role="form" (submit)="doLogin($event, username.value, password.value)">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" #username class="form-control" id="username" placeholder="Username">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" #password class="form-control" id="password" placeholder="Password">
+    </div>
+    <div *ngIf="!runningLogin">
+      <button *ngIf="!runningLogin" type="submit" class="btn btn-default">Submit</button>
+      <a [routerLink]="['Signup']">Click here to Signup</a>
+    </div>
+    <div *ngIf="runningLogin" style="width: 100%;text-align:center;">
+      <div class="spinner" >
+        <div class="cube1">&lt;</div>
+        <div class="cube2">&gt;</div>
+      </div>
+      <div class="cubetext">Loggin In</div>
+    </div>
+  </form>
+</div>

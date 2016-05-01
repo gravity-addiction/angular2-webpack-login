@@ -57,7 +57,7 @@ module.exports = function makeWebpackConfig() {
    */
   config.output = isTest ? {} : {
     path: root('dist'),
-    publicPath: isProd ? '/' : 'http://localhost:8080/',
+    publicPath: isProd ? '/ng2_master/' : 'http://localhost:8080/',
     filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
     chunkFilename: isProd ? '[id].[hash].chunk.js' : '[id].chunk.js'
   };
@@ -129,6 +129,7 @@ module.exports = function makeWebpackConfig() {
       },
       // all css required in src/app files will be merged in js files
       {test: /\.scss$/, exclude: root('src', 'style'), loader: 'raw!postcss!sass'},
+
 
       // support for .html as raw text
       // todo: change the loader to something that adds a hash to images
