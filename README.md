@@ -1,3 +1,7 @@
+
+# angular2-webpack-login
+based off preboot/angular2-webpack with jwt login authentication. page signup, login, modal login
+
 # angular2-webpack
 
 [![Dependency Status](https://david-dm.org/preboot/angular2-webpack/status.svg)](https://david-dm.org/preboot/angular2-webpack#info=dependencies) [![devDependency Status](https://david-dm.org/preboot/angular2-webpack/dev-status.svg)](https://david-dm.org/preboot/angular2-webpack#info=devDependencies)
