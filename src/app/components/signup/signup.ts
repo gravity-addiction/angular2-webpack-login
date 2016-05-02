@@ -8,7 +8,7 @@ import {LocalJWT} from '../../services/local-jwt/local-jwt';
   selector: 'signup',
   template: require('./signup.html'),
   styles: [require('./signup.css')],
-  providers: [LocalJWT, LoginService],
+  providers: [],
   directives: [RouterLink, CORE_DIRECTIVES, FORM_DIRECTIVES],
   pipes: []
 })

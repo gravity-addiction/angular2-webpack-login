@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild, ApplicationRef} from 'angular2/core';
 import {RouteConfig, Router, ROUTER_DIRECTIVES} from 'angular2/router';
-import {FORM_PROVIDERS} from 'angular2/common';
+import {FORM_PROVIDERS, FORM_DIRECTIVES} from 'angular2/common';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/share';
 
@@ -25,7 +25,7 @@ import {Signup} from "./components/signup/signup";
 @Component({
   selector: 'app', // <app></app>
   providers: [...FORM_PROVIDERS, Api, LocalJWT, LoginService],
-  directives: [...ROUTER_DIRECTIVES, LoggedInOutlet, Modal],
+  directives: [...FORM_DIRECTIVES, ...ROUTER_DIRECTIVES, LoggedInOutlet, Modal],
   pipes: [],
   styles: [require('./app.scss')],
   template: require('./app.html')
@@ -115,7 +115,7 @@ export class App implements OnInit {
       console.log('Cant Promise Login!');
     }
   }
-  
+
   decodeJWT() {
     this.jwtDecoded = this.jwt.parseJWT(this.jwt.fetchJWT());
   }

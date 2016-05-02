@@ -8,7 +8,7 @@ import {LoginService} from "../../services/login-service/login-service";
   selector: 'login',
   template: require('./login.html'),
   styles: [require('./login.css')],
-  providers: [LoginService],
+  providers: [],
   directives: [RouterLink, CORE_DIRECTIVES, FORM_DIRECTIVES],
   pipes: []
 })

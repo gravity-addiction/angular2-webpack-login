@@ -8,7 +8,7 @@ import {Login} from '../login/login';
 @Component({
   selector: 'home',
   directives: [...FORM_DIRECTIVES, ...ROUTER_DIRECTIVES, Login],
-  providers: [LocalJWT],
+  providers: [],
   pipes: [],
   styles: [require('./home.scss')],
   template: require('./home.html')
