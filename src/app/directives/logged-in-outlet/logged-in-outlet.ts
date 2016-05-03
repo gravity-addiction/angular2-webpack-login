@@ -89,7 +89,9 @@ export class LoggedInOutlet extends RouterOutlet {
         if (!!ans) { // Good Reply
           return Promise.resolve(true);
         }
-        return false; // Fail it!
+        return false; // Just Fail It!
+        // or
+        //return this.forceLogin(); // Really Enforce Login, repopping the modal
       },
       (error) => {
         alert(JSON.stringify(error));
@@ -98,7 +100,9 @@ export class LoggedInOutlet extends RouterOutlet {
         try { this.ModalLogin.close(); } catch(e) { }
         this.loginPromise = null;
 
-        return false; // Fail It!
+        return false; // Just Fail It!, leaving a closed modal
+        // or
+        //return this.forceLogin(); // Really Enforce Login, repopping the modal
       }
     );
 
