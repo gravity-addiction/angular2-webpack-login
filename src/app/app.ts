@@ -92,7 +92,11 @@ export class App implements OnInit {
     App._loggedInObserable.subscribe((data) => {
       this.decodeJWT();
     });
-    App._loggedOutObserable.subscribe(this.logout);
+    App._loggedOutObserable.subscribe(() => {
+      this.jwt.removeJWT();
+      this.jwtDecoded = null;
+      this.router.navigateByUrl('/login');
+    });
   }
 
   ngOnInit() {
@@ -129,8 +133,6 @@ export class App implements OnInit {
   }
 
   logout() {
-    this.jwt.removeJWT();
-    this.jwtDecoded = null;
-    this.router.navigateByUrl('/login');
+    App._loggedOutObserver.next(this);
   }
 }
