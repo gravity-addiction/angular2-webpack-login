@@ -1,9 +1,11 @@
-import {enableProdMode, provide} from "angular2/core";
-import {bootstrap, ELEMENT_PROBE_PROVIDERS} from 'angular2/platform/browser';
-import {ROUTER_PROVIDERS} from 'angular2/router';
-import {HashLocationStrategy, LocationStrategy} from 'angular2/platform/common';
-import {Http, HTTP_PROVIDERS} from 'angular2/http';
+import {enableProdMode, provide} from "@angular/core";
+import {bootstrap} from '@angular/platform-browser-dynamic';
+import {ELEMENT_PROBE_PROVIDERS} from '@angular/platform-browser';
+import {ROUTER_PROVIDERS} from '@angular/router-deprecated';
+import {HashLocationStrategy, LocationStrategy} from '@angular/common';
+import {Http, HTTP_PROVIDERS} from '@angular/http';
 import {AuthConfig, AuthHttp} from 'angular2-jwt';
+
 
 const ENV_PROVIDERS = [];
 // depending on the env mode, enable prod mode or add debugging modules

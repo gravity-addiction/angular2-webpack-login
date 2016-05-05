@@ -1,5 +1,5 @@
-import {Directive, Attribute, ViewContainerRef, DynamicComponentLoader, Input} from 'angular2/core';
-import {Router, RouterOutlet, ComponentInstruction} from 'angular2/router';
+import {Directive, Attribute, ViewContainerRef, DynamicComponentLoader, Input} from '@angular/core';
+import {Router, RouterOutlet, ComponentInstruction} from '@angular/router-deprecated';
 import {LocalJWT} from '../../services/local-jwt/local-jwt';
 import {tokenNotExpired} from 'angular2-jwt';
 

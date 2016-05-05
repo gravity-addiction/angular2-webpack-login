@@ -1,6 +1,6 @@
-import {Component} from 'angular2/core';
-import {Router, RouterLink} from 'angular2/router';
-import {CORE_DIRECTIVES, FORM_DIRECTIVES} from 'angular2/common';
+import {Component} from '@angular/core';
+import {Router, RouterLink} from '@angular/router-deprecated';
+import {CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
 import {LoginService} from '../../services/login-service/login-service';
 import {LocalJWT} from '../../services/local-jwt/local-jwt';
 

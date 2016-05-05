@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewChild, ApplicationRef} from 'angular2/core';
-import {RouteConfig, Router, ROUTER_DIRECTIVES} from 'angular2/router';
-import {FORM_PROVIDERS, FORM_DIRECTIVES} from 'angular2/common';
+import {Component, OnInit, ViewChild, ApplicationRef} from '@angular/core';
+import {RouteConfig, Router, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {FORM_PROVIDERS, FORM_DIRECTIVES} from '@angular/common';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/share';
 
-import {Modal} from "ng2-modal/Modal";
+import {Modal} from "./directives/ng2-modal/ng2-modal";
 
 import {LoggedInOutlet} from './directives/logged-in-outlet/logged-in-outlet';
 import {LocalJWT} from './services/local-jwt/local-jwt';
