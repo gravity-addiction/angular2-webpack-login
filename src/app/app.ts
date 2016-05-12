@@ -1,22 +1,22 @@
-import {Component, OnInit, ViewChild, ApplicationRef} from '@angular/core';
-import {RouteConfig, Router, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
-import {FORM_PROVIDERS, FORM_DIRECTIVES} from '@angular/common';
-import {Observable} from 'rxjs/Observable';
+import { Component, OnInit, ViewChild, ApplicationRef } from '@angular/core';
+import { Routes, ROUTER_DIRECTIVES, Router } from '@angular/router';
+import { FORM_PROVIDERS, FORM_DIRECTIVES } from '@angular/common';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/share';
 
-import {Modal} from "./directives/ng2-modal/ng2-modal";
+import { Modal } from "./directives/ng2-modal/ng2-modal";
 
-import {LoggedInOutlet} from './directives/logged-in-outlet/logged-in-outlet';
-import {LocalJWT} from './services/local-jwt/local-jwt';
-import {LoginService} from './services/login-service/login-service';
+import { LoggedInOutlet } from './directives/logged-in-outlet/logged-in-outlet';
+import { LocalJWT } from './services/local-jwt/local-jwt';
+import { LoginService } from './services/login-service/login-service';
 
 import '../style/app.scss';
 
-import {Api} from './services/api/api';
-import {Home} from './components/home/home';
-import {About} from "./components/about/about";
-import {Login} from "./components/login/login";
-import {Signup} from "./components/signup/signup";
+import { Api } from './services/api/api';
+import { Home } from './components/home/home';
+import { About } from "./components/about/about";
+import { Login } from "./components/login/login";
+import { Signup } from "./components/signup/signup";
 
 /*
  * App Component
@@ -27,14 +27,14 @@ import {Signup} from "./components/signup/signup";
   providers: [...FORM_PROVIDERS, Api, LocalJWT, LoginService],
   directives: [...FORM_DIRECTIVES, ...ROUTER_DIRECTIVES, LoggedInOutlet, Modal],
   pipes: [],
-  styles: [require('./app.scss')],
+  styles: [ require('./app.scss') ],
   template: require('./app.html')
 })
-@RouteConfig([
-  {path: '/', component: Home, name: 'Home'},
-  {path: '/about', component: About, name: 'About'},
-  {path: '/login', component: Login, name: 'Login'},
-  {path: '/signup', component: Signup, name: 'Signup'}
+@Routes([
+  { path: '/', component: Home },
+  { path: '/about', component: About },
+  { path: '/login', component: Login },
+  { path: '/signup', component: Signup }
 ])
 
 export class App implements OnInit {
@@ -58,7 +58,7 @@ export class App implements OnInit {
 
   loginPromise: Promise<boolean>; // </boolean>
 
-  runningLogin: boolean = false;
+  runningLogin = false;
 
   router: Router;
   jwt: LocalJWT;
@@ -66,27 +66,19 @@ export class App implements OnInit {
   applicationRef: ApplicationRef;
 
   constructor(
-    _router: Router,
     _jwt: LocalJWT,
     _login: LoginService,
-    _applicationRef: ApplicationRef
+    _applicationRef: ApplicationRef,
+    _router: Router
   ) {
 //    console.log('app constructor()');
+
+    //console.log(_router.urlTree);
 
     this.router = _router;
     this.jwt = _jwt;
     this.login = _login;
 
-
-// Dirty Workaround for Safari / IE Back button Rendering issues
-    this.applicationRef = _applicationRef;
-    this.router.subscribe(() => {
-      this.applicationRef.tick();
-      setTimeout(() => {
-        this.applicationRef.tick();
-      }, 100);
-    });
-// End Workaround
 
     // Must have at least one subscriber, otherwise next() fails
     App._loggedInObserable.subscribe((data) => {

@@ -1,22 +1,22 @@
-import {Component} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
-import {CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
-import {LoginService} from '../../services/login-service/login-service';
-import {LocalJWT} from '../../services/local-jwt/local-jwt';
+import { Component } from '@angular/core';
+import { ROUTER_DIRECTIVES, Router } from '@angular/router';
+import { CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
+import { LoginService } from '../../services/login-service/login-service';
+import { LocalJWT } from '../../services/local-jwt/local-jwt';
 
 @Component({
   selector: 'signup',
   template: require('./signup.html'),
-  styles: [require('./signup.css')],
+  styles: [ require('./signup.css') ],
   providers: [],
-  directives: [RouterLink, CORE_DIRECTIVES, FORM_DIRECTIVES],
+  directives: [ ...ROUTER_DIRECTIVES, ...CORE_DIRECTIVES, ...FORM_DIRECTIVES ],
   pipes: []
 })
 
 export class Signup {
-  router: Router;
   jwt: LocalJWT;
   login: LoginService;
+  router: Router;
 
   constructor(
     _router: Router,
@@ -36,8 +36,7 @@ export class Signup {
       resp => null,
       error => null,
       () => {
-        //Go Home!
-        this.router.navigate(['Home']);
+        this.router.navigateByUrl('/');
       }
     );
 

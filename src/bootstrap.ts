@@ -1,7 +1,7 @@
 import {enableProdMode, provide} from "@angular/core";
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {ELEMENT_PROBE_PROVIDERS} from '@angular/platform-browser';
-import {ROUTER_PROVIDERS} from '@angular/router-deprecated';
+import {ROUTER_PROVIDERS} from '@angular/router';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {Http, HTTP_PROVIDERS} from '@angular/http';
 import {AuthConfig, AuthHttp} from 'angular2-jwt';
@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', function main() {
         }), http);
       },
       deps: [Http]
-    }),
-    provide(LocationStrategy, {useClass: HashLocationStrategy}) // use #/ routes, remove this for HTML5 mode
+    })
+    //, provide(LocationStrategy, {useClass: HashLocationStrategy}) // use #/ routes, remove this for HTML5 mode
   ])
   .catch(err => console.error(err));
 });

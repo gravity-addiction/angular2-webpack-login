@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {RouterLink} from '@angular/router-deprecated';
+import { Component, OnInit } from '@angular/core';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
 @Component({
   selector: 'about',
   template: require('./about.html'),
   styles: [require('./about.scss')],
   providers: [],
-  directives: [],
+  directives: [ ...ROUTER_DIRECTIVES ],
   pipes: []
 })
 export class About implements OnInit {

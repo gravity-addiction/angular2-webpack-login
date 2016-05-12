@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
-import {FORM_DIRECTIVES} from '@angular/common';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
-import {App} from '../../app';
-import {LocalJWT} from '../../services/local-jwt/local-jwt';
-import {Login} from '../login/login';
+import { Component } from '@angular/core';
+import { FORM_DIRECTIVES } from '@angular/common';
+import { ROUTER_DIRECTIVES } from '@angular/router';
+import { App } from '../../app';
+import { LocalJWT } from '../../services/local-jwt/local-jwt';
+import { Login } from '../login/login';
 
 @Component({
   selector: 'home',
@@ -20,7 +20,7 @@ export class Home {
 
   jwtDecode = require('jwt-decode');
 
-  constructor(public _router: Router, public _jwt: LocalJWT) {
+  constructor(_jwt: LocalJWT) {
     //if (!_jwt.fetchJWT()) { this._router.navigate(['Login']); } // Force Page to Login
 
     this.jwt = _jwt.fetchJWT();

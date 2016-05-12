@@ -13,10 +13,10 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li [class.active]="activeTab=='Home'" class="active"><a [routerLink]="['Home']">Home</a></li>
-            <li><a [routerLink]="['About']">About</a></li>
-            <li *ngIf="!jwtDecoded"><a [routerLink]="['Signup']">Signup</a></li>
-            <li *ngIf="!jwtDecoded"><a [routerLink]="['Login']">Login</a></li>
+            <li [class.active]="activeTab=='Home'" class="active"><a [routerLink]="['/']">Home</a></li>
+            <li><a [routerLink]="['/about']">About</a></li>
+            <li *ngIf="!jwtDecoded"><a [routerLink]="['/signup']">Signup</a></li>
+            <li *ngIf="!jwtDecoded"><a [routerLink]="['/login']">Login</a></li>
             <li *ngIf="jwtDecoded"><a role="button" (click)="logout()">Logout</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
@@ -58,5 +58,5 @@
     </modal-content>
   </modal>
 
-  <auth-router-outlet [ModalLogin]="ModalLogin"></auth-router-outlet>
+  <router-outlet [ModalLogin]="ModalLogin"></router-outlet>
 </div>

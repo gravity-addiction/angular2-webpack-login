@@ -1,32 +1,37 @@
-import {Directive, Attribute, ViewContainerRef, DynamicComponentLoader, Input} from '@angular/core';
-import {Router, RouterOutlet, ComponentInstruction} from '@angular/router-deprecated';
-import {LocalJWT} from '../../services/local-jwt/local-jwt';
-import {tokenNotExpired} from 'angular2-jwt';
+import { Directive, Attribute, ViewContainerRef, ComponentFactory, ComponentRef, ResolvedReflectiveProvider, Input } from '@angular/core';
+import { Location } from '@angular/common';
+import { RouterOutletMap, Router } from '@angular/router';
+import { RouterOutlet } from '@angular/router/src/directives/router_outlet';
+import { LocalJWT } from '../../services/local-jwt/local-jwt';
+import { tokenNotExpired } from 'angular2-jwt';
 
 @Directive({
-  selector: 'auth-router-outlet',
+  selector: 'router-outlet',
 
 })
 
 export class LoggedInOutlet extends RouterOutlet {
   @Input() ModalLogin;
 
+  router: Router;
+  loc: Location;
   publicRoutes: any;
-  private parentRouter: Router;
-  private jwt: LocalJWT;
+  location: ViewContainerRef;
 
+  private jwt: LocalJWT;
   private loginPromise: any;
 
-  constructor(
-    _elementRef: ViewContainerRef,
-    _loader: DynamicComponentLoader,
-    _parentRouter: Router,
-    _jwt: LocalJWT,
-    @Attribute('name') nameAttr: string) {
-    super(_elementRef, _loader, _parentRouter, nameAttr);
 
+
+  constructor(parentOutletMap: RouterOutletMap, _location: ViewContainerRef,
+              @Attribute('name') name: string, _jwt: LocalJWT, _router: Router, _loc: Location ) {
+
+    super(parentOutletMap, _location, name);
+
+    this.router = _router;
     this.jwt = _jwt;
-    this.parentRouter = _parentRouter;
+    this.loc = _loc;
+
     this.publicRoutes = {
       '': true,
       'login': true,
@@ -36,47 +41,19 @@ export class LoggedInOutlet extends RouterOutlet {
 
   }
 
-  activate(instruction: ComponentInstruction) {
-    let url = instruction.urlPath;
-    let jwt = localStorage.getItem('jwt');
-    if (!this.publicRoutes[url] && !jwt) {
-      return this.forceLogin();
-    }
-
-    return super.activate(instruction);
-  }
-
-  reuse(instruction: ComponentInstruction) {
-//    console.log('Doing Reuse');
-    let url = instruction.urlPath;
+  load(factory: ComponentFactory<any>, providers: ResolvedReflectiveProvider[],
+           outletMap: RouterOutletMap): ComponentRef<any> {
 
     let jwt = localStorage.getItem('jwt');
-    if (!this.publicRoutes[url] && !jwt) {
-//      console.log('No Token Exists');
-      return this.forceLogin();
-    } else if (!this.publicRoutes[url] && !tokenNotExpired('jwt')) {
-//      console.log('Token Expired');
-      return this.forceLogin();
+    if (!this.publicRoutes[factory.selector] && (!jwt || !tokenNotExpired('jwt'))) {
+      return this.forceLogin(factory, providers, outletMap);
     }
 
-    return super.reuse(instruction);
+    return super.load(factory, providers, outletMap);
   }
 
-  routerCanDeactivate(instruction: ComponentInstruction) {
-//    console.log('Doing Deactivate', instruction);
-    let url = instruction.urlPath;
-
-    let jwt = localStorage.getItem('jwt');
-    if (!this.publicRoutes[url] && !jwt) {
-      return this.forceLogin();
-    } else if (!this.publicRoutes[url] && !tokenNotExpired('jwt')) {
-      return this.forceLogin();
-    }
-
-    return super.routerCanDeactivate(instruction);
-  }
-
-  forceLogin() {
+  forceLogin(factory: ComponentFactory<any>, providers: ResolvedReflectiveProvider[],
+           outletMap: RouterOutletMap) {
     if (!!this.loginPromise) { return this.loginPromise; }
 
     this.loginPromise = new Promise((resolve, reject) => {
@@ -87,22 +64,15 @@ export class LoggedInOutlet extends RouterOutlet {
         this.loginPromise = null;
 
         if (!!ans) { // Good Reply
-          return Promise.resolve(true);
+          return super.load(factory, providers, outletMap);
         }
-        return false; // Just Fail It!
-        // or
-        //return this.forceLogin(); // Really Enforce Login, repopping the modal
+        return this.forceLogin(factory, providers, outletMap);
       },
       (error) => {
-        alert(JSON.stringify(error));
 
-        // Dbl check Modal is closed
-        try { this.ModalLogin.close(); } catch(e) { }
         this.loginPromise = null;
 
-        return false; // Just Fail It!, leaving a closed modal
-        // or
-        //return this.forceLogin(); // Really Enforce Login, repopping the modal
+        return false;
       }
     );
 

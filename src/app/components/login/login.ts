@@ -1,15 +1,15 @@
-import {Component} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
-import {CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
+import { Component } from '@angular/core';
+import { ROUTER_DIRECTIVES, Router } from '@angular/router';
+import { CORE_DIRECTIVES, FORM_DIRECTIVES } from '@angular/common';
 
-import {LoginService} from "../../services/login-service/login-service";
+import { LoginService } from "../../services/login-service/login-service";
 
 @Component({
   selector: 'login',
   template: require('./login.html'),
-  styles: [require('./login.css')],
+  styles: [ require('./login.css') ],
   providers: [],
-  directives: [RouterLink, CORE_DIRECTIVES, FORM_DIRECTIVES],
+  directives: [ ...ROUTER_DIRECTIVES, ...CORE_DIRECTIVES, ...FORM_DIRECTIVES ],
   pipes: []
 })
 export class Login {
@@ -17,8 +17,8 @@ export class Login {
   router: Router;
 
   constructor(_login: LoginService, _router: Router) {
-    this.login = _login;
     this.router = _router;
+    this.login = _login;
   }
 
   doLogin(event, user, pass) {
@@ -26,7 +26,7 @@ export class Login {
     this.login.doLogin(user, pass)
     .subscribe(
       resp => {
-        this.router.navigate(['Home']);
+        this.router.navigateByUrl('/');
       }
     );
   }
