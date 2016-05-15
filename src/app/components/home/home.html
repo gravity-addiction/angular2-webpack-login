@@ -1,6 +1,6 @@
 <div>
     <h1>angular2-webpack-login</h1>
-    <div><a [routerLink]="['About']">About</a> page requires at least a jwt token that is not expired.</div>
+    <div><a linkTo="/about">About</a> page requires at least a jwt token that is not expired.</div>
     <h2 *ngIf="jwt">Your JWT is:</h2>
     <pre *ngIf="jwt" class="jwt"><code>{{ jwt }}</code></pre>
     <pre *ngIf="profile" class="jwt"><code>{{ profile | json }}</code></pre>

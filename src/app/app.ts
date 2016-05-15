@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild, ApplicationRef } from '@angular/core';
-import { Routes, ROUTER_DIRECTIVES, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, ViewChild, ApplicationRef, NgZone } from '@angular/core';
 import { FORM_PROVIDERS, FORM_DIRECTIVES } from '@angular/common';
+
+import { Router } from '@ngrx/router';
 import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/share';
 
 import { Modal } from "./directives/ng2-modal/ng2-modal";
@@ -13,10 +15,6 @@ import { LoginService } from './services/login-service/login-service';
 import '../style/app.scss';
 
 import { Api } from './services/api/api';
-import { Home } from './components/home/home';
-import { About } from "./components/about/about";
-import { Login } from "./components/login/login";
-import { Signup } from "./components/signup/signup";
 
 /*
  * App Component
@@ -25,19 +23,13 @@ import { Signup } from "./components/signup/signup";
 @Component({
   selector: 'app', // <app></app>
   providers: [...FORM_PROVIDERS, Api, LocalJWT, LoginService],
-  directives: [...FORM_DIRECTIVES, ...ROUTER_DIRECTIVES, LoggedInOutlet, Modal],
+  directives: [...FORM_DIRECTIVES, LoggedInOutlet, Modal],
   pipes: [],
   styles: [ require('./app.scss') ],
   template: require('./app.html')
 })
-@Routes([
-  { path: '/', component: Home },
-  { path: '/about', component: About },
-  { path: '/login', component: Login },
-  { path: '/signup', component: Signup }
-])
 
-export class App implements OnInit {
+export class App implements OnInit, OnDestroy {
   // Observers for Tracking Logins between modules
   static _loggedInObserver;
   static _loggedInObserable = new Observable(observer => {
@@ -49,6 +41,11 @@ export class App implements OnInit {
    App._loggedOutObserver = observer; // Assign to static App._loggedOutObserver
   }).share();
 
+  static _forceLoginObserver;
+  static _forceLoginObserable = new Observable(observer => {
+   App._forceLoginObserver = observer; // Assign to static App._loggedOutObserver
+  }).share();
+
   static _registeredComponents = [1, 2, 3, 6];
 
   @ViewChild('ModalLogin') ModalLogin;
@@ -56,7 +53,9 @@ export class App implements OnInit {
   // Decoded JWT
   jwtDecoded: any;
 
-  loginPromise: Promise<boolean>; // </boolean>
+  loginModalPromise: Promise<boolean>;
+  loginPromise: Promise<boolean>;
+
 
   runningLogin = false;
 
@@ -64,20 +63,23 @@ export class App implements OnInit {
   jwt: LocalJWT;
   login: LoginService;
   applicationRef: ApplicationRef;
+  ngZone: NgZone;
+
 
   constructor(
     _jwt: LocalJWT,
     _login: LoginService,
     _applicationRef: ApplicationRef,
+    _ngZone: NgZone,
     _router: Router
   ) {
 //    console.log('app constructor()');
 
     //console.log(_router.urlTree);
-
     this.router = _router;
     this.jwt = _jwt;
     this.login = _login;
+    this.ngZone = _ngZone;
 
 
     // Must have at least one subscriber, otherwise next() fails
@@ -87,7 +89,11 @@ export class App implements OnInit {
     App._loggedOutObserable.subscribe(() => {
       this.jwt.removeJWT();
       this.jwtDecoded = null;
-      this.router.navigateByUrl('/login');
+      this.router.go('/login');
+    });
+
+    App._forceLoginObserable.subscribe((authGuardObserver: Observer<boolean>) => {
+      this.forceLogin(authGuardObserver);
     });
   }
 
@@ -95,21 +101,22 @@ export class App implements OnInit {
     App._loggedInObserver.next(true);
   }
 
+  ngOnDestroy() {
+    console.log('Destroy');
+  }
+
   ngAfterViewInit() {
+
 //    console.log('app ngAfterViewInit()');
     this.ModalLogin.onOpen.subscribe(_loginPromise => {
-      console.log('Modal Opend', _loginPromise);
-      this.loginPromise = _loginPromise;
+      //console.log('Modal Opend', _loginPromise);
+      this.loginModalPromise = _loginPromise;
     });
   }
 
   onModalClose() {
-    console.log('Modal Closed', this.loginPromise);
-    try {
-      this.loginPromise[1]('Closed Modal');
-    } catch(e) {
-      console.log('Cant Promise Login!');
-    }
+    //console.log('Modal Closed');
+    this.loginModalPromise[0](false);
   }
 
   decodeJWT() {
@@ -119,12 +126,46 @@ export class App implements OnInit {
   modalLogin(event, user, pass) {
 //    console.log("app login", event, user, pass);
     this.login.doLogin(user, pass).subscribe(response => {
-      this.loginPromise[0](true); // Confirm Login for Angular CanActivate / CanDeactivate
-//      console.log('app Modal Response', response);
+      this.loginModalPromise[0](true); // Confirm ModalPromise -> ngrx AuthGuard observable
     });
   }
 
   logout() {
     App._loggedOutObserver.next(this);
+  }
+
+
+  forceLogin(observer: Observer<boolean>) {
+    this.ngZone.run(() => {
+      this.loginPromise = new Promise((res) => {
+        this.ModalLogin.open(res);
+      }).then(
+        (ans) => {
+          // Dbl check Modal is closed
+          try { this.ModalLogin.close(); } catch (e) { ans = false; }
+
+          if (!!ans) {
+            // Good Auth
+            observer.next(true);
+            observer.complete();
+            return Promise.resolve(true);
+          }
+
+          this.forceLoginError(observer, 'Bad Login');
+        },
+        (err) => this.forceLoginError(observer, err)
+      );
+    });
+  }
+
+  forceLoginError(observer: Observer<boolean>, err?: any) {
+    observer.next(false);
+    observer.complete();
+
+    try { this.ModalLogin.close(); } catch (e) { }
+    this.router.back();
+
+    return false;
+    //return this.forceLogin(observer); // Fail It hard!
   }
 }

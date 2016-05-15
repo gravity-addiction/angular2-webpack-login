@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { ROUTER_DIRECTIVES, Router } from '@angular/router';
 import { CORE_DIRECTIVES, FORM_DIRECTIVES } from '@angular/common';
+
+import { Router } from '@ngrx/router';
 
 import { LoginService } from "../../services/login-service/login-service";
 
@@ -9,7 +10,7 @@ import { LoginService } from "../../services/login-service/login-service";
   template: require('./login.html'),
   styles: [ require('./login.css') ],
   providers: [],
-  directives: [ ...ROUTER_DIRECTIVES, ...CORE_DIRECTIVES, ...FORM_DIRECTIVES ],
+  directives: [ ...CORE_DIRECTIVES, ...FORM_DIRECTIVES ],
   pipes: []
 })
 export class Login {
@@ -17,8 +18,8 @@ export class Login {
   router: Router;
 
   constructor(_login: LoginService, _router: Router) {
-    this.router = _router;
     this.login = _login;
+    this.router = _router;
   }
 
   doLogin(event, user, pass) {
@@ -26,7 +27,7 @@ export class Login {
     this.login.doLogin(user, pass)
     .subscribe(
       resp => {
-        this.router.navigateByUrl('/');
+        this.router.go('/');
       }
     );
   }

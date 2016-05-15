@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { FORM_DIRECTIVES } from '@angular/common';
-import { ROUTER_DIRECTIVES } from '@angular/router';
 import { App } from '../../app';
 import { LocalJWT } from '../../services/local-jwt/local-jwt';
 import { Login } from '../login/login';
 
 @Component({
   selector: 'home',
-  directives: [...FORM_DIRECTIVES, ...ROUTER_DIRECTIVES, Login],
+  directives: [...FORM_DIRECTIVES, Login],
   providers: [],
   pipes: [],
   styles: [require('./home.scss')],

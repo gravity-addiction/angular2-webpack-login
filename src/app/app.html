@@ -13,16 +13,18 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li [class.active]="activeTab=='Home'" class="active"><a [routerLink]="['/']">Home</a></li>
-            <li><a [routerLink]="['/about']">About</a></li>
-            <li *ngIf="!jwtDecoded"><a [routerLink]="['/signup']">Signup</a></li>
-            <li *ngIf="!jwtDecoded"><a [routerLink]="['/login']">Login</a></li>
+            <li [class.active]="activeTab=='Home'" class="active"><a linkTo="/">Home</a></li>
+            <li><a linkTo="/about">About</a></li>
+            <li *ngIf="!jwtDecoded"><a linkTo="/signup">Signup</a></li>
+            <li *ngIf="!jwtDecoded"><a linkTo="/login">Login</a></li>
             <li *ngIf="jwtDecoded"><a role="button" (click)="logout()">Logout</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
   </div>
+
+  <route-view></route-view>
 
   <modal #ModalLogin
       [hideCloseButton]="false"
@@ -34,7 +36,7 @@
       <h2>Login</h2>
     </modal-header>
     <modal-content>
-      <form role="form" (submit)="modalLogin($event, username.value, password.value)">
+      <form role="form" (submit)="modalLogin($event, username.value, password.value); password.value = ''">
       <div class="form-group">
         <label for="username">Username</label>
         <input type="text" #username class="form-control" id="username" placeholder="Username">
@@ -58,5 +60,4 @@
     </modal-content>
   </modal>
 
-  <router-outlet [ModalLogin]="ModalLogin"></router-outlet>
 </div>
