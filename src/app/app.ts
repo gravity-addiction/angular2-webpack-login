@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ApplicationRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, ApplicationRef, NgZone } from '@angular/core';
 import { FORM_PROVIDERS, FORM_DIRECTIVES } from '@angular/common';
 
 import { Router } from '@ngrx/router';
@@ -28,7 +28,7 @@ import { Api } from './services/api/api';
   template: require('./app.html')
 })
 
-export class App implements OnInit, OnDestroy {
+export class App implements OnInit {
   // Observers for Tracking Logins between modules
   static _loggedInObserver;
   static _loggedInObserable = new Observable(observer => {
@@ -94,14 +94,15 @@ export class App implements OnInit, OnDestroy {
     App._forceLoginObserable.subscribe((authGuardObserver: Observer<boolean>) => {
       this.forceLogin(authGuardObserver);
     });
+
+    this.router.subscribe(
+      (info) => this.modalLoginCleanup(),
+      (err) => this.modalLoginCleanup()
+    );
   }
 
   ngOnInit() {
     App._loggedInObserver.next(true);
-  }
-
-  ngOnDestroy() {
-    console.log('Destroy');
   }
 
   ngAfterViewInit() {
@@ -113,9 +114,10 @@ export class App implements OnInit, OnDestroy {
     });
   }
 
+
   onModalClose() {
     //console.log('Modal Closed');
-    this.loginModalPromise[0](false);
+    try { this.loginModalPromise[1](false); } catch(e) { }
   }
 
   decodeJWT() {
@@ -129,15 +131,19 @@ export class App implements OnInit, OnDestroy {
     });
   }
 
+  modalLoginCleanup() {
+    try { this.ModalLogin.close(); } catch (e) { }
+  }
+
   logout() {
     App._loggedOutObserver.next(this);
   }
 
-
+  // Force Login
   forceLogin(observer: Observer<boolean>) {
     this.ngZone.run(() => {
-      this.loginPromise = new Promise((res) => {
-        this.ModalLogin.open(res);
+      this.loginPromise = new Promise((res, rej) => {
+        this.ModalLogin.open(res, rej);
       }).then(
         (ans) => {
           // Dbl check Modal is closed
@@ -150,9 +156,12 @@ export class App implements OnInit, OnDestroy {
             return Promise.resolve(true);
           }
 
-          this.forceLoginError(observer, 'Bad Login');
+          return this.forceLoginError(observer, 'Bad Login');
         },
-        (err) => this.forceLoginError(observer, err)
+        (err) => {
+          this.router.back();
+          return this.forceLoginError(observer, err);
+        }
       );
     });
   }
@@ -162,7 +171,6 @@ export class App implements OnInit, OnDestroy {
     observer.complete();
 
     try { this.ModalLogin.close(); } catch (e) { }
-    this.router.back();
 
     return false;
     //return this.forceLogin(observer); // Fail It hard!
