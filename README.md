@@ -1,3 +1,5 @@
+## using @angular/router-deprecated
+## ngrx/router version branch [ngrx branch](https://github.com/gravity-addiction/angular2-webpack-login/tree/ngrx)
 
 # angular2-webpack-login
 based off preboot/angular2-webpack with jwt login authentication. page signup, login, modal login
