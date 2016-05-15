@@ -8,7 +8,6 @@ import 'rxjs/add/operator/share';
 
 import { Modal } from "./directives/ng2-modal/ng2-modal";
 
-import { LoggedInOutlet } from './directives/logged-in-outlet/logged-in-outlet';
 import { LocalJWT } from './services/local-jwt/local-jwt';
 import { LoginService } from './services/login-service/login-service';
 
@@ -23,7 +22,7 @@ import { Api } from './services/api/api';
 @Component({
   selector: 'app', // <app></app>
   providers: [...FORM_PROVIDERS, Api, LocalJWT, LoginService],
-  directives: [...FORM_DIRECTIVES, LoggedInOutlet, Modal],
+  directives: [...FORM_DIRECTIVES, Modal],
   pipes: [],
   styles: [ require('./app.scss') ],
   template: require('./app.html')
