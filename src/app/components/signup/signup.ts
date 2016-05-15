@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
+
+import { Router } from '@ngrx/router';
+
 import { LoginService } from '../../services/login-service/login-service';
 import { LocalJWT } from '../../services/local-jwt/local-jwt';
 
@@ -15,13 +18,16 @@ import { LocalJWT } from '../../services/local-jwt/local-jwt';
 export class Signup {
   jwt: LocalJWT;
   login: LoginService;
+  router: Router;
 
   constructor(
     _jwt: LocalJWT,
-    _login: LoginService
+    _login: LoginService,
+    _router: Router
   ) {
     this.jwt = _jwt;
     this.login = _login;
+    this.router = _router;
   }
 
   signup(event, username, password, email, fullname) {
@@ -32,8 +38,7 @@ export class Signup {
       resp => null,
       error => null,
       () => {
-        // Fix
-        // this.router.navigateByUrl('/');
+        this.router.go('/');
       }
     );
 
