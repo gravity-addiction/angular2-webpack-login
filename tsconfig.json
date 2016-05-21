@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "compileOnSave": false,
-    "buildOnSave": false,
     "target": "ES5",
     "module": "commonjs",
     "emitDecoratorMetadata": true,
@@ -13,5 +11,7 @@
     "node_modules",
     "typings/main",
     "typings/main.d.ts"
-  ]
+  ],
+  "compileOnSave": false,
+  "buildOnSave": false
 }
